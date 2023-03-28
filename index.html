@@ -146,7 +146,7 @@
         padding: 5px 10px;
         list-style-type: none;
         border-left: 1px solid black;
-        transition: 3s;
+        transition: 2s;
         transition-property: all;
     }
 
@@ -181,7 +181,7 @@
         let previouslyShownColor;
         let rnd;
         let count = 0;
-        let editTaskBool = false;
+        let editTaskIsTrue = false;
         var tempId;
 
         addTaskBtn.addEventListener('click', addTask);
@@ -191,10 +191,8 @@
             }
         });
 
-
-
         function addTask(event) {
-            if (editTaskBool) {
+            if (editTaskIsTrue) {
                 ul.children[tempId].innerHTML = `${taskInput.value}<div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-three-dots"></i>
@@ -202,10 +200,11 @@
                         <ul class="dropdown-menu">
                             <li><a onclick="editTask(${tempId})" class="dropdown-item edit-elements" href="#"><i class="bi bi-pen"></i></a></li>
                             <li><a onclick="deleteTask(${tempId})" class="dropdown-item" href="#"><i class="bi bi-trash-fill"></i></a></li>
+                            <li><a onclick="checkTask(${tempId})" class="dropdown-item" href="#"><i class="bi bi-check2"></i></a></li>
                         </ul>
                     </div>`;
                 taskList[tempId].text = taskInput.value;
-                editTaskBool = false;
+                editTaskIsTrue = false;
                 taskInput.value = "";
             } else {
                 if (taskInput.value == "") {
@@ -216,18 +215,19 @@
                     }
                     previouslyShownColor = rnd;
                     let li =
-                        `<li id="task-${count}" class="tasks" style="border-left: 3px solid ${taskBorderColors[rnd]}">
-                    ${taskInput.value}
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-three-dots"></i>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a onclick="editTask(${count})" class="dropdown-item edit-elements" href="#"><i class="bi bi-pen"></i></a></li>
-                            <li><a onclick="deleteTask(${count})" class="dropdown-item" href="#"><i class="bi bi-trash-fill"></i></a></li>
-                        </ul>
-                    </div>
-                </li>`;
+                        `<li id="task-${count}" class="tasks" style="border-left: 3px solid ${taskBorderColors[rnd]}">${taskInput.value}
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-three-dots"></i>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a onclick="editTask(${count})" class="dropdown-item edit-elements" href="#"><i class="bi bi-pen"></i></a></li>
+                                <li><a onclick="deleteTask(${count})" class="dropdown-item" href="#"><i class="bi bi-trash-fill"></i></a></li>
+                                <li><a onclick="checkTask(${count})" class="dropdown-item" href="#"><i class="bi bi-check2"></i></a></li>
+
+                            </ul>
+                        </div>
+                        </li>`;
                     taskList.push({ "id": count, "text": taskInput.value });
                     //console.log(taskList);
                     ul.insertAdjacentHTML("beforeend", li);
@@ -240,16 +240,25 @@
 
         //const editElement = document.querySelector('#edit-element');
         function deleteTask(listItemPosition) {
-            ul.children[listItemPosition].remove();
+            document.getElementById(`task-${listItemPosition}`).remove();
             //console.log("delete task function executed");
         };
 
         function editTask(listItemPosition) {
-            console.log(taskList[listItemPosition].text);
+            let currentTask = document.getElementById(`task-${listItemPosition}`);
+            taskInput.focus();
+            console.log(currentTask.text);
             taskInput.value = taskList[listItemPosition].text;
             tempId = listItemPosition;
-            editTaskBool = true;
+            editTaskIsTrue = true;
         }
+
+        function checkTask(listItemPosition) {
+            //console.log(document.getElementById(`task-${listItemPosition}`));
+            document.getElementById(`task-${listItemPosition}`).style.textDecoration = 'line-through';
+            document.getElementById(`task-${listItemPosition}`).style.color = 'rgba(100,100,100,0.5)';
+            //console.log("delete task function executed");
+        };
 
     </script>
 </body>
